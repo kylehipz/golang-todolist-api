@@ -11,8 +11,20 @@ func main() {
 	port := 3000
 	app := fiber.New()
 
-	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("HELLO")
+	apiV1 := app.Group("/api/v1/todos")
+
+	apiV1.Get("/", func(c fiber.Ctx) error {
+		todos := []string{"HELLO", "WORLD", "TODOS", "API"}
+		return c.JSON(fiber.Map{
+			"data": todos,
+		})
+	})
+
+	apiV1.Get("/:id", func(c fiber.Ctx) error {
+		id := c.Params("id")
+		return c.JSON(fiber.Map{
+			"data": id,
+		})
 	})
 
 	log.Printf("Server started on port %d", port)
